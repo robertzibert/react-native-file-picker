@@ -1,97 +1,102 @@
 # react-native-file-picker
-A React Native module that allows you to use native UI to select a file from the device library
-Based on [react-native-image-picker](https://github.com/marcshilling/react-native-image-picker)
+A React Native module that uses native UI to select a file from the device library.
 
-## Install
+Project heavily based on [react-native-image-picker](https://github.com/marcshilling/react-native-image-picker).
 
-### iOS
-1. `npm install react-native-fille-picker@latest --save`
-2. In the XCode's "Project navigator", right click on your project's Libraries folder ➜ `Add Files to <...>`
-3. Go to `node_modules` ➜ `react-native-file-picker` ➜ `ios` ➜ select `RNFilePicker.xcodeproj`
-4. Add `RNFilePicker.a` to `Build Phases -> Link Binary With Libraries`
-5. Compile and have fun
+### note 26/1/2017
 
-### Android
-1. `npm install react-native-file-picker@latest --save`
+This repository is **heavily outdated and** I've been using it with **react native 0.24**, so it propably won't work with newer versions. Try using one of forks, most recent being [this one](https://github.com/luisfuertes/react-native-file-picker).
 
-```gradle
-// file: android/settings.gradle
-...
+# Installation
 
-include ':react-native-file-picker'
-project(':react-native-file-picker').projectDir = new File(settingsDir, '../node_modules/react-native-file-picker/android')
-```
-```gradle
-// file: android/app/build.gradle
-...
+## iOS
+not supported
 
-dependencies {
+## Android
+1. `npm install https://github.com/Lichwa/react-native-file-picker --save`
+
+2. add to `android/settings.gradle`
+
+    ```gradle
     ...
-    compile project(':react-native-file-picker')
-}
-```
-```xml
-<!-- file: android/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.myApp">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    include ':react-native-file-picker'
+    project(':react-native-file-picker').projectDir = new File(settingsDir, '../node_modules/react-native-file-picker/android')
+    ```
 
-    <!-- add following permissions -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <!-- -->
+3. add to `android/app/build.gradle`
+
+    ```gradle
     ...
-```
-```java
-// file: MainActivity.java
-...
 
-import com.filepicker.FilePickerPackage; // import package
-
-public class MainActivity extends ReactActivity {
-
-   /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
-    @Override
-    protected List<ReactPackage> getPackages() {
-        return Arrays.<ReactPackage>asList(
-            new MainReactPackage(),
-            new FilePickerPackage() // Add package
-        );
+    dependencies {
+        ...
+        compile project(':react-native-file-picker')
     }
-...
-}
+    ```
 
-```
-## Usage
+4. make sure you have all needed permissions in `android/app/src/main/AndroidManifest.xml`
+
+    ```xml
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.myApp">
+
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        <uses-feature android:name="android.hardware.camera" android:required="true"/>
+        <uses-feature android:name="android.hardware.camera.autofocus" />
+        ...
+    ```
+
+5. add to `android/app/src/main/java/<project namespace>/MainActivity.java`
+
+    ```java
+    ...
+
+    import com.filepicker.FilePickerPackage; // import package
+
+    public class MainActivity extends ReactActivity {
+
+       /**
+       * A list of packages used by the app. If the app uses additional views
+       * or modules besides the default ones, add more packages here.
+       */
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new FilePickerPackage() // Add package
+            );
+        }
+    ...
+    }
+
+    ```
+
+# Usage
 1. In your React Native javascript code, bring in the native module:
 
-  ```javascript
-var FilePickerManager = require('NativeModules').FilePickerManager;
-  ```
-2. Use it like so:
+    ```javascript
+    var FilePickerManager = require('NativeModules').FilePickerManager;
+    ```
 
-  When you want to display the picker:
-  ```javascript
+2. Displaying file picker:
 
-  FilePickerManager.showFilePicker((response) => {
-    console.log('Response = ', response);
+    ```javascript
+    FilePickerManager.showFilePicker((response) => {
+        console.log('Response', response);
 
-    if (response.didCancel) {
-      console.log('User cancelled file picker');
-    }
-    else if (response.error) {
-      console.log('FilePickerManager Error: ', response.error);
-    }
-    else {
-      this.setState({
-        file: response
-      });
-    }
-  });
-  ```
+        if (response.didCancel) {
+            console.log('User cancelled file picker');
+        }
+        else if (response.error) {
+            console.log('FilePickerManager Error: ', response.error);
+        }
+        else {
+            this.setState({
+                file: response
+            });
+        }
+    });
+    ```
